@@ -50,6 +50,7 @@
   /** `Object#toString` result references. */
   var argsTag = '[object Arguments]',
       arrayTag = '[object Array]',
+      asyncTag = '[object AsyncFunction]',
       boolTag = '[object Boolean]',
       dateTag = '[object Date]',
       errorTag = '[object Error]',
@@ -8868,7 +8869,10 @@
       // The use of `Object#toString` avoids issues with the `typeof` operator
       // in older versions of Chrome and Safari which return 'function' for regexes
       // and Safari 8 which returns 'object' for typed array constructors.
-      return isObject(value) && objToString.call(value) == funcTag;
+      if (!isObject(value))
+        return false;
+      var tag = objToString.call(value);
+      return ((tag  == funcTag) || (tag == asyncTag));
     }
 
     /**
